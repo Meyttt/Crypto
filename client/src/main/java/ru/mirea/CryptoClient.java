@@ -36,6 +36,11 @@ public class CryptoClient implements AutoCloseable {
             keyReply = JsonUtil.fromJson(reply, ServerKeyMessage.class);
         }
     }
+    public void baseExchange(int base, int module){
+        HttpPost keyRequest = new HttpPost(uri.resolve("/bases"));
+        Bases bases = new Bases()
+    }
+
 
     public DialogReply dialog(DialogMessage message) throws IOException {
         HttpPost request = new HttpPost(uri.resolve("/dialog"));
