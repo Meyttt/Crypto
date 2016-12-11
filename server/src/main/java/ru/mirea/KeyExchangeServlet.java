@@ -1,9 +1,8 @@
 package ru.mirea;
 
 import org.eclipse.jetty.util.IO;
-import ru.mirea.common.ClientKeyMessage;
+import ru.mirea.common.KeyMessage;
 import ru.mirea.common.JsonUtil;
-import ru.mirea.common.ServerKeyMessage;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -24,10 +23,10 @@ public class KeyExchangeServlet extends HttpServlet {
 
         byte[] bytes = IO.readBytes(req.getInputStream());
         String string = new String(bytes, "UTF-8");
-        ClientKeyMessage message = JsonUtil.fromJson(string, ClientKeyMessage.class);
+        KeyMessage message = JsonUtil.fromJson(string, KeyMessage.class);
         req.getSession().setAttribute("publicKey", message.getKey());
 
-        ServerKeyMessage reply = new ServerKeyMessage("serverPublicKey");
+        KeyMessage reply = new KeyMessage("serverPublicKey");
         resp.getWriter().write(JsonUtil.toJson(reply));
     }
 }

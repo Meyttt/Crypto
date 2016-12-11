@@ -20,7 +20,7 @@ public class CryptoClient implements AutoCloseable {
     private final CloseableHttpClient client;
     Base base;
 
-    private ServerKeyMessage keyReply;
+    private KeyMessage keyReply;
 
     public CryptoClient(URI uri) {
         this.uri = uri;
@@ -38,12 +38,12 @@ public class CryptoClient implements AutoCloseable {
 
     public void exchangeKeys() throws IOException {
         HttpPost keyRequest = new HttpPost(uri.resolve("/keys"));
-        ClientKeyMessage keyMessage = new ClientKeyMessage("clientPublicKey");
+        KeyMessage keyMessage = new KeyMessage("clientPublicKey");
         String json = JsonUtil.toJson(keyMessage);
         keyRequest.setEntity(new StringEntity(json));
         try (CloseableHttpResponse response = client.execute(keyRequest)) {
             String reply = EntityUtils.toString(response.getEntity());
-            keyReply = JsonUtil.fromJson(reply, ServerKeyMessage.class);
+            keyReply = JsonUtil.fromJson(reply, KeyMessage.class);
         }
     }
 

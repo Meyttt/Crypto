@@ -23,6 +23,7 @@ public class BaseServlet extends HttpServlet {
         BigInteger generator = BigInteger.valueOf(11);
         BigInteger module = BigInteger.valueOf(12);
         Base base = new Base(generator,module);
+        req.getSession().setAttribute("base",base);
         resp.getWriter().write(JsonUtil.toJson(base));
     }
 }
