@@ -3,11 +3,11 @@ package ru.mirea.common;
 /**
  * Created by master on 28.11.2016.
  */
-public class ServerKeyMessage {
+public class KeyMessage {
 
     private String key;
 
-    public ServerKeyMessage(String key) {
+    public KeyMessage(String key) {
         this.key = key;
     }
 
