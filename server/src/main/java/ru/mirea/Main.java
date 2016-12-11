@@ -12,6 +12,7 @@ public class Main {
         Server server = new Server(8080);
         ServletContextHandler handler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
+        handler.addServlet(BaseServlet.class,"/base");
         handler.addServlet(KeyExchangeServlet.class, "/keys");
         handler.addServlet(DialogServlet.class, "/dialog");
         handler.addServlet(BaseExchange.class,"/bases");
