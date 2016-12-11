@@ -23,4 +23,10 @@ public class Base {
         this.generator = generator;
         this.module = module;
     }
+    public BigInteger getPublicKey(Integer privateKey){
+        return generator.pow(privateKey).mod(module);
+    }
+    public BigInteger getCode(Integer privateKey, BigInteger otherPublicKey){
+        return otherPublicKey.pow(privateKey).mod(module);
+    }
 }

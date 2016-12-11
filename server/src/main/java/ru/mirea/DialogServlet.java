@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * Created by master on 28.11.2016.
@@ -23,7 +24,7 @@ public class DialogServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
 
-        String clientPublicKey = (String) req.getSession().getAttribute("publicKey");
+        BigInteger clientPublicKey = (BigInteger) req.getSession().getAttribute("code");
         if (clientPublicKey == null) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
@@ -31,11 +32,11 @@ public class DialogServlet extends HttpServlet {
 
         byte[] bytes = IO.readBytes(req.getInputStream());
         String encryptedString = new String(bytes, "UTF-8");
-        String decryptedString = CryptoUtil.decrypt(encryptedString, "serverPrivateKey");
+        String decryptedString = CryptoUtil.decrypt(encryptedString, (BigInteger) req.getSession().getAttribute("code"));
         DialogMessage message = JsonUtil.fromJson(decryptedString, DialogMessage.class);
 
         DialogReply reply = new DialogReply("Reply: " + message.getText());
         String replyString = JsonUtil.toJson(reply);
-        resp.getWriter().write(CryptoUtil.encrypt(replyString, clientPublicKey));
+        resp.getWriter().write(CryptoUtil.encrypt(replyString, (BigInteger) req.getSession().getAttribute("code")));
     }
 }
