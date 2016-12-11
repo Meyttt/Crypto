@@ -1,17 +1,19 @@
 package ru.mirea.common;
 
+import java.math.BigInteger;
+
 /**
  * Created by master on 28.11.2016.
  */
 public class KeyMessage {
 
-    private String key;
+    private BigInteger key;
 
-    public KeyMessage(String key) {
+    public KeyMessage(BigInteger key) {
         this.key = key;
     }
 
-    public String getKey() {
+    public BigInteger getKey() {
         return key;
     }
 }

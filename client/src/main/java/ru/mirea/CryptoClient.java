@@ -9,6 +9,7 @@ import org.apache.http.util.EntityUtils;
 import ru.mirea.common.*;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URI;
 
 /**
@@ -18,7 +19,8 @@ public class CryptoClient implements AutoCloseable {
 
     private final URI uri;
     private final CloseableHttpClient client;
-    Base base;
+    private Base base;
+    private BigInteger code;
 
     private KeyMessage keyReply;
 
@@ -38,13 +40,17 @@ public class CryptoClient implements AutoCloseable {
 
     public void exchangeKeys() throws IOException {
         HttpPost keyRequest = new HttpPost(uri.resolve("/keys"));
-        KeyMessage keyMessage = new KeyMessage("clientPublicKey");
+        Integer clientPrivateKey = Integer.valueOf(4411);
+        BigInteger clientPublicKey = base.getPublicKey(clientPrivateKey);
+        KeyMessage keyMessage = new KeyMessage(clientPublicKey);
         String json = JsonUtil.toJson(keyMessage);
         keyRequest.setEntity(new StringEntity(json));
         try (CloseableHttpResponse response = client.execute(keyRequest)) {
             String reply = EntityUtils.toString(response.getEntity());
             keyReply = JsonUtil.fromJson(reply, KeyMessage.class);
         }
+        code = base.getCode(clientPrivateKey,keyReply.getKey());
+
     }
     public void baseExchange(int base, int module){
         HttpPost keyRequest = new HttpPost(uri.resolve("/bases"));
@@ -55,11 +61,12 @@ public class CryptoClient implements AutoCloseable {
     public DialogReply dialog(DialogMessage message) throws IOException {
         HttpPost request = new HttpPost(uri.resolve("/dialog"));
         String json = JsonUtil.toJson(message);
-        String encryptedJson = CryptoUtil.encrypt(json, keyReply.getKey());
+        String encryptedJson = CryptoUtil.encrypt(json, code);
+        System.out.println("here "+encryptedJson);
         request.setEntity(new StringEntity(encryptedJson));
         try (CloseableHttpResponse response = client.execute(request)) {
             String reply = EntityUtils.toString(response.getEntity());
-            String decryptedReply = CryptoUtil.decrypt(reply, "clientPrivateKey");
+            String decryptedReply = CryptoUtil.decrypt(reply, code);
             return JsonUtil.fromJson(decryptedReply, DialogReply.class);
         }
     }
