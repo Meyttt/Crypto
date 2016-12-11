@@ -18,12 +18,22 @@ public class CryptoClient implements AutoCloseable {
 
     private final URI uri;
     private final CloseableHttpClient client;
+    Base base;
 
     private ServerKeyMessage keyReply;
 
     public CryptoClient(URI uri) {
         this.uri = uri;
         this.client = HttpClients.createDefault();
+    }
+
+    public void exchangeBase() throws IOException {
+        HttpPost keyRequest = new HttpPost(uri.resolve("/base"));
+        try (CloseableHttpResponse response = client.execute(keyRequest)) {
+            String reply = EntityUtils.toString(response.getEntity());
+            base = JsonUtil.fromJson(reply, Base.class);
+        }
+
     }
 
     public void exchangeKeys() throws IOException {

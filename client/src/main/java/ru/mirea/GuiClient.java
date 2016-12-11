@@ -26,6 +26,7 @@ public class GuiClient extends Application {
     public void start(Stage primaryStage) throws Exception {
         // todo: добавить кнопку соединения
         cryptoClient = new CryptoClient(new URI("http://localhost:8080")); // todo: настраиваемый параметр
+        cryptoClient.exchangeBase();
         cryptoClient.exchangeKeys();
 
         GridPane grid = new GridPane();
