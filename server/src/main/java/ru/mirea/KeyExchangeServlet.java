@@ -26,7 +26,7 @@ public class KeyExchangeServlet extends HttpServlet {
         byte[] bytes = IO.readBytes(req.getInputStream());
         String string = new String(bytes, "UTF-8");
         KeyMessage message = JsonUtil.fromJson(string, KeyMessage.class);
-        Integer serverPrivateKey = Integer.valueOf(1581);
+        Integer serverPrivateKey = Integer.valueOf(15381);
         Base base = (Base) req.getSession().getAttribute("base");
         BigInteger serverPublicKey=base.getPublicKey(serverPrivateKey);
         BigInteger code = base.getCode(serverPrivateKey,message.getKey());
