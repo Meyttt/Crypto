@@ -10,7 +10,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import ru.mirea.common.DialogMessage;
-import ru.mirea.common.DialogReply;
 
 import java.io.IOException;
 import java.net.URI;
@@ -39,7 +38,7 @@ public class GuiClient extends Application {
         Button button = new Button("Отправить");
         button.setOnAction(event -> {
             try {
-                DialogReply reply = cryptoClient.dialog(new DialogMessage(input.getText()));
+                DialogMessage reply = cryptoClient.dialog(new DialogMessage(input.getText()));
                 output.setStyle("-fx-text-fill: green;");
                 output.setText(reply.getText());
             } catch (IOException ex) {

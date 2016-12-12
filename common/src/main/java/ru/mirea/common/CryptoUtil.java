@@ -8,23 +8,14 @@ import java.nio.charset.StandardCharsets;
  */
 public class CryptoUtil {
 
-    public static String encrypt(String data, BigInteger code) {
-//        System.out.println("Encrypting " + data + " with " + code);
+    public static BigInteger encrypt(String data, BigInteger code) {
         BigInteger intBytes=new BigInteger(data.getBytes(StandardCharsets.UTF_8));
-        System.out.println(intBytes);
         intBytes=intBytes.xor(code);
-        System.out.println(intBytes);
-        System.out.println();
-        String res =new String(intBytes.toByteArray(), StandardCharsets.UTF_8);
-        return res;
+        return intBytes;
     }
 
-    public static String decrypt(String data, BigInteger code) {
-//        System.out.println("Decrypting " + data + " with " + code);
-        BigInteger intBytes=new BigInteger(data.getBytes(StandardCharsets.UTF_8));
-        System.out.println(intBytes);
-        intBytes=intBytes.xor(code);
-        System.out.println(intBytes);
+    public static String decrypt(BigInteger data, BigInteger code) {
+        BigInteger intBytes=data.xor(code);
         String res =new String(intBytes.toByteArray(), StandardCharsets.UTF_8);
         return res;
     }
