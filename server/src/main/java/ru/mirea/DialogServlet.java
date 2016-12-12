@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Base64;
 
 /**
  * Created by master on 28.11.2016.
@@ -29,9 +30,10 @@ public class DialogServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN);
             return;
         }
-
         byte[] bytes = IO.readBytes(req.getInputStream());
         String encryptedString = new String(bytes, "UTF-8");
+        System.out.println("getting "+encryptedString);
+        encryptedString= Base64.getDecoder().decode(encryptedString).toString();
         String decryptedString = CryptoUtil.decrypt(encryptedString, (BigInteger) req.getSession().getAttribute("code"));
         DialogMessage message = JsonUtil.fromJson(decryptedString, DialogMessage.class);
 

@@ -11,6 +11,7 @@ import ru.mirea.common.*;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
+import java.util.Base64;
 
 /**
  * Created by master on 28.11.2016.
@@ -57,7 +58,8 @@ public class CryptoClient implements AutoCloseable {
         HttpPost request = new HttpPost(uri.resolve("/dialog"));
         String json = JsonUtil.toJson(message);
         String encryptedJson = CryptoUtil.encrypt(json, code);
-        System.out.println("here "+encryptedJson);
+        encryptedJson=Base64.getEncoder().encodeToString(encryptedJson.getBytes());
+        System.out.println("sending "+encryptedJson);
         request.setEntity(new StringEntity(encryptedJson));
         try (CloseableHttpResponse response = client.execute(request)) {
             String reply = EntityUtils.toString(response.getEntity());

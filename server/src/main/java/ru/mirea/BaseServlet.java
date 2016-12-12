@@ -20,8 +20,8 @@ public class BaseServlet extends HttpServlet {
                           HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-        BigInteger generator = new BigInteger("344568");
-        BigInteger module = new BigInteger("684223");
+        BigInteger generator = new BigInteger("34456358");
+        BigInteger module = new BigInteger("684456223");
         Base base = new Base(generator,module);
         req.getSession().setAttribute("base",base);
         resp.getWriter().write(JsonUtil.toJson(base));
