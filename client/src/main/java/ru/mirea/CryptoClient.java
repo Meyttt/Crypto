@@ -11,7 +11,6 @@ import ru.mirea.common.*;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URI;
-import java.util.Base64;
 
 /**
  * Created by master on 28.11.2016.
@@ -59,17 +58,14 @@ public class CryptoClient implements AutoCloseable {
     }
 
 
-    public DialogReply dialog(DialogMessage message) throws IOException {
+    public DialogMessage dialog(DialogMessage message) throws IOException {
         HttpPost request = new HttpPost(uri.resolve("/dialog"));
-        String json = JsonUtil.toJson(message);
-        String encryptedJson = CryptoUtil.encrypt(json, code);
-        encryptedJson=Base64.getEncoder().encodeToString(encryptedJson.getBytes());
-        System.out.println("sending "+encryptedJson);
-        request.setEntity(new StringEntity(encryptedJson));
+        BigInteger encrypted = CryptoUtil.encrypt(message.getText(),code);
+        request.setEntity(new StringEntity(encrypted+""));
         try (CloseableHttpResponse response = client.execute(request)) {
             String reply = EntityUtils.toString(response.getEntity());
-            String decryptedReply = CryptoUtil.decrypt(reply, code);
-            return JsonUtil.fromJson(decryptedReply, DialogReply.class);
+            String decryptedReply = CryptoUtil.decrypt( new BigInteger(reply), code);
+            return new DialogMessage(decryptedReply);
         }
     }
 
