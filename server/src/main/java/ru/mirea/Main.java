@@ -2,6 +2,7 @@ package ru.mirea;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import ru.mirea.common.VerificationData;
 
 /**
  * Created by master on 28.11.2016.
