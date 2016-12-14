@@ -53,27 +53,29 @@ public class CryptoClient implements AutoCloseable {
         code = base.getCode(clientPrivateKey,keyReply.getKey());
 
     }
-    public boolean verification(VerificationData verificationData) throws IOException, VerificationException {
-        HttpPost request = new HttpPost(uri.resolve("/verification"));
+    public String verification(VerificationData verificationData) throws IOException, VerificationException {
+		System.out.println("ver started");
+		HttpPost request = new HttpPost(uri.resolve("/verification"));
         BigInteger login = CryptoUtil.encrypt(verificationData.getLogin(),code);
         BigInteger password = CryptoUtil.encrypt(verificationData.getPassword(),code);
         request.setEntity(new StringEntity(JsonUtil.toJson(new VerificationDataEncrypted(login,password))));
         try (CloseableHttpResponse response = client.execute(request)){
-            String str = response.getEntity().toString();
+			String str = EntityUtils.toString(response.getEntity());
             String serverAnswer = CryptoUtil.decrypt(new BigInteger(str),code);
-            return Boolean.parseBoolean(str);
+            return serverAnswer;
         }
     }
 
-    public boolean registration(VerificationData registrationData) throws IOException, VerificationException {
+    public String registration(VerificationData registrationData) throws IOException, VerificationException {
         HttpPost request = new HttpPost(uri.resolve("/registration"));
         BigInteger login = CryptoUtil.encrypt(registrationData.getLogin(),code);
         BigInteger password = CryptoUtil.encrypt(registrationData.getPassword(),code);
         request.setEntity(new StringEntity(JsonUtil.toJson(new VerificationDataEncrypted(login,password))));
         try (CloseableHttpResponse response = client.execute(request)){
-            String str = response.getEntity().toString();
-            String serverAnswer = CryptoUtil.decrypt(new BigInteger(str),code);
-            return Boolean.parseBoolean(str);
+            String str = EntityUtils.toString(response.getEntity());
+//			System.out.println(str);
+			String serverAnswer = CryptoUtil.decrypt(new BigInteger(str),code);
+            return serverAnswer;
         }
     }
 

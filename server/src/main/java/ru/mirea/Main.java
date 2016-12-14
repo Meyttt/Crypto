@@ -16,6 +16,8 @@ public class Main {
         handler.addServlet(BaseServlet.class,"/base");
         handler.addServlet(KeyExchangeServlet.class, "/keys");
         handler.addServlet(DialogServlet.class, "/dialog");
+        handler.addServlet(RegistrationServlet.class,"/registration");
+        handler.addServlet(VerificationServlet.class,"/verification");
         server.setHandler(handler);
         server.start();
     }
