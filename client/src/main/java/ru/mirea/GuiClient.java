@@ -33,6 +33,7 @@ public class GuiClient extends Application {
         grid.setHgap(5);
         grid.setVgap(5);
         TextField input = new TextField();
+        TextField input1 = new TextField();
         TextField output = new TextField();
         output.setEditable(false);
         Button button = new Button("Отправить");

@@ -2,6 +2,7 @@ package ru.mirea;
 
 import org.eclipse.jetty.util.IO;
 import ru.mirea.common.CryptoUtil;
+import ru.mirea.common.VerificationException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -30,9 +31,6 @@ public class DialogServlet extends HttpServlet {
         String encryptedString = new String(bytes, "UTF-8");
         BigInteger userdata = new BigInteger(encryptedString);
         String userText=CryptoUtil.decrypt(userdata,clientPublicKey);
-
-        System.out.println("USERTEXT AT SERVER: "+userText);
-
         BigInteger answer = CryptoUtil.encrypt(userText,clientPublicKey);
         resp.getWriter().write(answer.toString());
     }
