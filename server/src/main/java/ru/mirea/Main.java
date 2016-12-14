@@ -9,21 +9,16 @@ import ru.mirea.common.VerificationData;
  */
 public class Main {
 
-    public static void main1(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {
         Server server = new Server(8080);
         ServletContextHandler handler =
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         handler.addServlet(BaseServlet.class,"/base");
         handler.addServlet(KeyExchangeServlet.class, "/keys");
         handler.addServlet(DialogServlet.class, "/dialog");
-        handler.addServlet(BaseExchange.class,"/bases");
+        handler.addServlet(RegistrationServlet.class,"/registration");
+        handler.addServlet(VerificationServlet.class,"/verification");
         server.setHandler(handler);
         server.start();
-    }
-
-    public static void main(String[] args) {
-        String testString="Test";
-        System.out.println(testString.toCharArray());
-        System.out.println(testString.getBytes());
     }
 }
