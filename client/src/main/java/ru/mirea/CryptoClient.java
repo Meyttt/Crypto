@@ -9,6 +9,7 @@ import org.apache.http.util.EntityUtils;
 import ru.mirea.common.*;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 
@@ -52,6 +53,29 @@ public class CryptoClient implements AutoCloseable {
         code = base.getCode(clientPrivateKey,keyReply.getKey());
 
     }
+    public boolean verification(VerificationData verificationData) throws IOException, VerificationException {
+        HttpPost request = new HttpPost(uri.resolve("/verification"));
+        BigInteger login = CryptoUtil.encrypt(verificationData.getLogin(),code);
+        BigInteger password = CryptoUtil.encrypt(verificationData.getPassword(),code);
+        request.setEntity(new StringEntity(JsonUtil.toJson(new VerificationDataEncrypted(login,password))));
+        try (CloseableHttpResponse response = client.execute(request)){
+            String str = response.getEntity().toString();
+            String serverAnswer = CryptoUtil.decrypt(new BigInteger(str),code);
+            return Boolean.parseBoolean(str);
+        }
+    }
+
+    public boolean registration(VerificationData registrationData) throws IOException, VerificationException {
+        HttpPost request = new HttpPost(uri.resolve("/registration"));
+        BigInteger login = CryptoUtil.encrypt(registrationData.getLogin(),code);
+        BigInteger password = CryptoUtil.encrypt(registrationData.getPassword(),code);
+        request.setEntity(new StringEntity(JsonUtil.toJson(new VerificationDataEncrypted(login,password))));
+        try (CloseableHttpResponse response = client.execute(request)){
+            String str = response.getEntity().toString();
+            String serverAnswer = CryptoUtil.decrypt(new BigInteger(str),code);
+            return Boolean.parseBoolean(str);
+        }
+    }
 
     public DialogMessage dialog(DialogMessage message) throws IOException {
         HttpPost request = new HttpPost(uri.resolve("/dialog"));
@@ -68,4 +92,5 @@ public class CryptoClient implements AutoCloseable {
     public void close() throws IOException {
         client.close();
     }
+
 }

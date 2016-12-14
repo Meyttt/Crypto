@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
 import ru.mirea.common.DialogMessage;
+import ru.mirea.common.VerificationData;
 
 import java.io.IOException;
 import java.net.URI;
@@ -32,26 +33,27 @@ public class GuiClient extends Application {
         grid.setPadding(new Insets(5));
         grid.setHgap(5);
         grid.setVgap(5);
-        TextField input = new TextField();
-        TextField input1 = new TextField();
+        TextField loginInput = new TextField();
+        TextField passwordInput = new TextField();
         TextField output = new TextField();
         output.setEditable(false);
         Button button = new Button("Отправить");
         button.setOnAction(event -> {
             try {
-                DialogMessage reply = cryptoClient.dialog(new DialogMessage(input.getText()));
-                output.setStyle("-fx-text-fill: green;");
-                output.setText(reply.getText());
+                DialogMessage reply = cryptoClient.dialog(new DialogMessage(loginInput.getText()));
+//                DialogMessage reply = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput));
+//                output.setStyle("-fx-text-fill: green;");
+//                output.setText(reply.getText());
             } catch (IOException ex) {
                 output.setStyle("-fx-text-fill: red;");
                 // todo: отметить красным
                 output.setText(ex.getMessage());
             }
         });
-        grid.addRow(0, new Label("Сообщение:"), input, button);
-        grid.addRow(1, new Label("Ответ:"), output);
-        GridPane.setHgrow(input, Priority.ALWAYS);
-        GridPane.setHgrow(output, Priority.ALWAYS);
+        grid.addRow(0, new Label("Логин:"), loginInput, button);
+        grid.addRow(1, new Label("Пароль:"), passwordInput);
+        GridPane.setHgrow(loginInput, Priority.ALWAYS);
+        GridPane.setHgrow(passwordInput, Priority.ALWAYS);
         Scene scene = new Scene(grid);
         primaryStage.setTitle("Обмен");
         primaryStage.setScene(scene);
