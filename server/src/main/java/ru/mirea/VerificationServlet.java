@@ -35,6 +35,7 @@ public class VerificationServlet extends HttpServlet {
 		try {
 			answer = database.verification(login,password);
 			BigInteger encryptAnswer=CryptoUtil.encrypt(answer, (BigInteger) req.getSession().getAttribute("code"));
+			System.out.println(encryptAnswer.toString());
 			resp.getWriter().write(encryptAnswer.toString());
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();

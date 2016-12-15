@@ -25,7 +25,6 @@ public class RegistrationServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req,
 						  HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Here we are");
 		req.setCharacterEncoding("UTF-8");
 		resp.setCharacterEncoding("UTF-8");
 
@@ -38,7 +37,6 @@ public class RegistrationServlet extends HttpServlet {
 		try {
 			answer = database.registration(login,password);
 			BigInteger encryptAnswer=CryptoUtil.encrypt(answer, (BigInteger) req.getSession().getAttribute("code"));
-			System.out.println("eAnswer="+encryptAnswer.toString());
 			resp.getWriter().write(encryptAnswer.toString());
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();

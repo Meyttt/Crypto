@@ -38,35 +38,11 @@ public class GuiClient extends Application {
         grid.setVgap(5);
         TextField loginInput = new TextField();
         TextField passwordInput = new TextField();
-        TextField output = new TextField();
-        output.setEditable(false);
+
         Button ver = new Button("Вход");
         Button reg = new Button("Регистрация");
-        reg.setOnAction(event -> {
-            try {
-                String answer = cryptoClient.registration(new VerificationData(loginInput.getText(),passwordInput.getText()));
-                output.setText(answer);
-            } catch (IOException ex) {
-                output.setStyle("-fx-text-fill: red;");
-                output.setText(ex.getMessage());
-            } catch (VerificationException e) {
-                e.printStackTrace();
-            }
-        });
-        ver.setOnAction(event -> {
-            try {
-                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getText()));
-                output.setText(answer);
-            } catch (IOException ex) {
-                output.setStyle("-fx-text-fill: red;");
-                output.setText(ex.getMessage());
-            } catch (VerificationException e) {
-                e.printStackTrace();
-            }
-        });
         grid.addRow(0, new Label("Логин:"), loginInput, reg);
         grid.addRow(1, new Label("Пароль:"), passwordInput,ver);
-        grid.addRow(2,new Label("Ответ: "),output);
         GridPane.setHgrow(loginInput, Priority.ALWAYS);
         GridPane.setHgrow(passwordInput, Priority.ALWAYS);
         Scene sceneFirst = new Scene(grid);
@@ -74,6 +50,41 @@ public class GuiClient extends Application {
         primaryStage.setTitle("Обмен");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        GridPane grid1 = new GridPane();
+        grid1.setPadding(new Insets(5));
+        grid1.setHgap(5);
+        grid1.setVgap(5);
+        TextField output = new TextField();
+        output.setEditable(false);
+        grid1.addRow(0,new Label("Ответ: "),output);
+        Scene sceneSecond = new Scene(grid1);
+
+        reg.setOnAction(event -> {
+            try {
+                String answer = cryptoClient.registration(new VerificationData(loginInput.getText(),passwordInput.getText()));
+                primaryStage.setScene(sceneSecond);
+
+//                output.setText(answer);
+            } catch (IOException ex) {
+//                output.setStyle("-fx-text-fill: red;");
+//                output.setText(ex.getMessage());
+            } catch (VerificationException e) {
+                e.printStackTrace();
+            }
+        });
+        ver.setOnAction(event -> {
+            try {
+                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getText()));
+//                output.setText(answer);
+            } catch (IOException ex) {
+//                output.setStyle("-fx-text-fill: red;");
+//                output.setText(ex.getMessage());
+            } catch (VerificationException e) {
+                e.printStackTrace();
+            }
+        });
+
 
     }
    }

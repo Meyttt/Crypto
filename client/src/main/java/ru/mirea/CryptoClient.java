@@ -54,7 +54,6 @@ public class CryptoClient implements AutoCloseable {
 
     }
     public String verification(VerificationData verificationData) throws IOException, VerificationException {
-		System.out.println("ver started");
 		HttpPost request = new HttpPost(uri.resolve("/verification"));
         BigInteger login = CryptoUtil.encrypt(verificationData.getLogin(),code);
         BigInteger password = CryptoUtil.encrypt(verificationData.getPassword(),code);
