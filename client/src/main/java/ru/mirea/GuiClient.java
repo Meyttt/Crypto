@@ -69,6 +69,28 @@ public class GuiClient extends Application {
             } catch (IOException ex) {
 //                output.setStyle("-fx-text-fill: red;");
 //                output.setText(ex.getMessage());
+        TextField output = new TextField();
+        output.setEditable(false);
+        Button ver = new Button("Вход");
+        Button reg = new Button("Регистрация");
+        reg.setOnAction(event -> {
+            try {
+                String answer = cryptoClient.registration(new VerificationData(loginInput.getText(),passwordInput.getText()));
+                output.setText(answer);
+            } catch (IOException ex) {
+                output.setStyle("-fx-text-fill: red;");
+                output.setText(ex.getMessage());
+            } catch (VerificationException e) {
+                e.printStackTrace();
+            }
+        });
+        ver.setOnAction(event -> {
+            try {
+                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getText()));
+                output.setText(answer);
+            } catch (IOException ex) {
+                output.setStyle("-fx-text-fill: red;");
+                output.setText(ex.getMessage());
             } catch (VerificationException e) {
                 e.printStackTrace();
             }
@@ -84,7 +106,16 @@ public class GuiClient extends Application {
                 e.printStackTrace();
             }
         });
-
+        grid.addRow(0, new Label("Логин:"), loginInput, reg);
+        grid.addRow(1, new Label("Пароль:"), passwordInput,ver);
+        grid.addRow(2,new Label("Ответ: "),output);
+        GridPane.setHgrow(loginInput, Priority.ALWAYS);
+        GridPane.setHgrow(passwordInput, Priority.ALWAYS);
+        Scene sceneFirst = new Scene(grid);
+        scene = sceneFirst;
+        primaryStage.setTitle("Обмен");
+        primaryStage.setScene(scene);
+        primaryStage.show();
 
     }
    }
