@@ -5,6 +5,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -34,8 +35,7 @@ public class GuiClient extends Application {
         grid.setHgap(5);
         grid.setVgap(5);
         TextField loginInput = new TextField();
-        TextField passwordInput = new TextField();
-
+        PasswordField passwordInput = new PasswordField();
         Button ver = new Button("Вход");
         Button reg = new Button("Регистрация");
         grid.addRow(0, new Label("Логин:"), loginInput, reg);
@@ -66,7 +66,7 @@ public class GuiClient extends Application {
         );
         reg.setOnAction(event -> {
                     try {
-                        String answer = cryptoClient.registration(new VerificationData(loginInput.getText(), passwordInput.getText()));
+                        String answer = cryptoClient.registration(new VerificationData(loginInput.getText(), passwordInput.getPromptText()));
                         switch (answer) {
                             case ("New user added"):
                                 primaryStage.setScene(sceneSecond);
@@ -86,7 +86,7 @@ public class GuiClient extends Application {
 
         ver.setOnAction(event -> {
             try {
-                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getText()));
+                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getPromptText()));
                 switch (answer){
                     case"Incorrect login":
                         loginInput.setText("Incorrect login");
