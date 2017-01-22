@@ -9,7 +9,6 @@ import org.apache.http.util.EntityUtils;
 import ru.mirea.common.*;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URI;
 
@@ -72,7 +71,6 @@ public class CryptoClient implements AutoCloseable {
         request.setEntity(new StringEntity(JsonUtil.toJson(new VerificationDataEncrypted(login,password))));
         try (CloseableHttpResponse response = client.execute(request)){
             String str = EntityUtils.toString(response.getEntity());
-//			System.out.println(str);
 			String serverAnswer = CryptoUtil.decrypt(new BigInteger(str),code);
             return serverAnswer;
         }

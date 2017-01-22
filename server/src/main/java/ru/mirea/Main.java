@@ -2,7 +2,6 @@ package ru.mirea;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
-import ru.mirea.common.VerificationData;
 
 /**
  * Created by master on 28.11.2016.
@@ -15,8 +14,8 @@ public class Main {
                 new ServletContextHandler(ServletContextHandler.SESSIONS);
         handler.addServlet(BaseServlet.class,"/base");
         handler.addServlet(KeyExchangeServlet.class, "/keys");
-        handler.addServlet(DialogServlet.class, "/dialog");
         handler.addServlet(RegistrationServlet.class,"/registration");
+        handler.addServlet(DialogServlet.class, "/dialog");
         handler.addServlet(VerificationServlet.class,"/verification");
         server.setHandler(handler);
         server.start();

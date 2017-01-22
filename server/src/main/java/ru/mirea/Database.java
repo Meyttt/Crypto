@@ -1,10 +1,8 @@
 package ru.mirea;
 
-import ru.mirea.common.CryptoUtil;
 import java.io.*;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -33,6 +31,8 @@ public class Database implements Serializable {
             } catch (EOFException e) {
                 fileInputStream.close();
             }
+        }else{
+            this.table =new HashMap<String, dbCell>();
         }
 
     }
@@ -71,7 +71,7 @@ public class Database implements Serializable {
             if(db.correctPassword(passsword)){
                 return "Correct password";
             }else return "Incorrect password";
-        }else return "Incorrect login!";
+        }else return "Incorrect login";
 
     }
 }
