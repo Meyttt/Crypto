@@ -2,6 +2,7 @@ package ru.mirea;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -53,28 +54,44 @@ public class GuiClient extends Application {
         grid1.setHgap(5);
         grid1.setVgap(5);
         TextField output = new TextField();
-        output.setEditable(false);
+        output.setLayoutX(6);
+        output.setLayoutX(5);
+//        output.setEditable(false);
         grid1.addRow(0,new Label("Ответ: "),output);
         Scene sceneSecond = new Scene(grid1);
         loginInput.setOnMouseClicked(event -> {
             loginInput.clear();
-            loginInput.setStyle("-fx-text-fill: black;");}
+            }
         );
         passwordInput.setOnMouseClicked(event -> {
             passwordInput.clear();
-            passwordInput.setStyle("-fx-text-fill: black;");}
+        }
         );
+        GridPane errorGridPane = new GridPane();
+        Label errorLabel = new Label();
+        errorGridPane.addRow(0, errorLabel);
+        errorGridPane.setAlignment(Pos.CENTER);
+        Scene errorScene = new Scene(errorGridPane);
+        Stage errorStage = new Stage();
+        errorStage.setScene(errorScene);
+        errorStage.setTitle("Ошибка");
+        errorStage.setHeight(100);
+        errorStage.setWidth(200);
+        errorStage.setResizable(false);
         reg.setOnAction(event -> {
                     try {
-                        String answer = cryptoClient.registration(new VerificationData(loginInput.getText(), passwordInput.getPromptText()));
+                        String answer = cryptoClient.registration(new VerificationData(loginInput.getText(), passwordInput.getText()));
                         switch (answer) {
                             case ("New user added"):
+                                errorLabel.setText("New user added!");
+                                errorLabel.setStyle("-fx-text-fill: yellowgreen;");
                                 primaryStage.setScene(sceneSecond);
-                                output.setText(answer);
+                                errorStage.show();
                                 break;
                             case ("Login already exists"):
-                                loginInput.setText("Login already exists");
-                                loginInput.setStyle("-fx-text-fill: red;");
+                                errorLabel.setText("Login already exists");
+                                errorLabel.setStyle("-fx-text-fill: red;");
+                                errorStage.show();
                                 break;
                         }
 
@@ -86,17 +103,24 @@ public class GuiClient extends Application {
 
         ver.setOnAction(event -> {
             try {
-                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getPromptText()));
+                String answer = cryptoClient.verification(new VerificationData(loginInput.getText(),passwordInput.getText()));
                 switch (answer){
                     case"Incorrect login":
-                        loginInput.setText("Incorrect login");
-                        loginInput.setStyle("-fx-text-fill: red;");
-                        passwordInput.setStyle("-fx-text-fill: black;");
+                        errorLabel.setText("Incorrect login");
+                        errorLabel.setStyle("-fx-text-fill: red;");
+                        errorStage.show();
                         break;
                     case "Incorrect password":
-                        passwordInput.setText("Incorrect password");
-                        passwordInput.setText("-fx-text-fill: red;");
-                        loginInput.setText("-fx-text-fill: black;");
+                        errorLabel.setText("Incorrect password");
+                        errorLabel.setStyle("-fx-text-fill: red;");
+                        errorStage.show();
+                        break;
+                    case "Correct password":
+                        errorLabel.setText("Correct userdata");
+                        errorLabel.setStyle("-fx-text-fill: yellowgreen;");
+                        primaryStage.setScene(sceneSecond);
+                        errorStage.show();
+                        break;
                 }
 
             } catch (IOException ex) {

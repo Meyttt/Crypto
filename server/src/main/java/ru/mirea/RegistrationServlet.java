@@ -46,26 +46,26 @@ public class RegistrationServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
-	@Override
-	protected void doGet(HttpServletRequest req,
-						  HttpServletResponse resp) throws ServletException, IOException {
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
-
-		byte[] bytes = IO.readBytes(req.getInputStream());
-		String string = new String(bytes, "UTF-8");
-		VerificationDataEncrypted verificationDataEncrypted = JsonUtil.fromJson(string,VerificationDataEncrypted.class);
-		String login = CryptoUtil.decrypt(verificationDataEncrypted.getLogin(), (BigInteger) req.getSession().getAttribute("code"));
-		String password = CryptoUtil.decrypt(verificationDataEncrypted.getPassword(),(BigInteger) req.getSession().getAttribute("code"));
-		String answer=null;
-		try {
-			answer = database.registration(login,password);
-			BigInteger encryptAnswer=CryptoUtil.encrypt(answer, (BigInteger) req.getSession().getAttribute("code"));
-			resp.getWriter().write(encryptAnswer.toString());
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
-	}
+//	@Override
+//	protected void doGet(HttpServletRequest req,
+//						  HttpServletResponse resp) throws ServletException, IOException {
+//		req.setCharacterEncoding("UTF-8");
+//		resp.setCharacterEncoding("UTF-8");
+//
+//		byte[] bytes = IO.readBytes(req.getInputStream());
+//		String string = new String(bytes, "UTF-8");
+//		VerificationDataEncrypted verificationDataEncrypted = JsonUtil.fromJson(string,VerificationDataEncrypted.class);
+//		String login = CryptoUtil.decrypt(verificationDataEncrypted.getLogin(), (BigInteger) req.getSession().getAttribute("code"));
+//		String password = CryptoUtil.decrypt(verificationDataEncrypted.getPassword(),(BigInteger) req.getSession().getAttribute("code"));
+//		String answer=null;
+//		try {
+//			answer = database.registration(login,password);
+//			BigInteger encryptAnswer=CryptoUtil.encrypt(answer, (BigInteger) req.getSession().getAttribute("code"));
+//			resp.getWriter().write(encryptAnswer.toString());
+//		} catch (NoSuchAlgorithmException e) {
+//			e.printStackTrace();
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }

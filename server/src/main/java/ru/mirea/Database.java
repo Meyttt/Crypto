@@ -9,7 +9,7 @@ import java.util.Set;
  * Created by Admin on 20.09.2016.
  */
 public class Database implements Serializable {
-    private File tableFile = new File("table");
+    private File tableFile = new File("table.txt");
     private static HashMap<String, dbCell> table = new HashMap<>();
     Database() throws IOException, ClassNotFoundException {
         input();
@@ -31,8 +31,6 @@ public class Database implements Serializable {
             } catch (EOFException e) {
                 fileInputStream.close();
             }
-        }else{
-            this.table =new HashMap<String, dbCell>();
         }
 
     }
