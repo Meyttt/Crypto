@@ -2,6 +2,8 @@ package ru.mirea;
 
 import org.eclipse.jetty.util.IO;
 import ru.mirea.common.CryptoUtil;
+import ru.mirea.common.JsonUtil;
+import ru.mirea.common.VerificationDataEncrypted;
 import ru.mirea.common.VerificationException;
 
 import javax.servlet.ServletException;
@@ -21,17 +23,14 @@ public class DialogServlet extends HttpServlet {
                           HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
-
-        BigInteger clientPublicKey = (BigInteger) req.getSession().getAttribute("code");
-        if (clientPublicKey == null) {
-            resp.sendError(HttpServletResponse.SC_FORBIDDEN);
-            return;
-        }
         byte[] bytes = IO.readBytes(req.getInputStream());
-        String encryptedString = new String(bytes, "UTF-8");
-        BigInteger userdata = new BigInteger(encryptedString);
-        String userText=CryptoUtil.decrypt(userdata,clientPublicKey);
-        BigInteger answer = CryptoUtil.encrypt(userText,clientPublicKey);
-        resp.getWriter().write(answer.toString());
+        String string = new String(bytes, "UTF-8");
+        String userMessageEncrypted = JsonUtil.fromJson(string,String.class);
+        String userMessage = CryptoUtil.decrypt(new BigInteger(userMessageEncrypted), (BigInteger) req.getSession().getAttribute("code"));
+        //// TODO: 26.01.2017 воткнуть обработку сервером 
+        String answer = "get from func";
+        BigInteger encryptAnswer=CryptoUtil.encrypt(answer, (BigInteger) req.getSession().getAttribute("code"));
+        System.out.println(encryptAnswer.toString());
+        resp.getWriter().write(encryptAnswer.toString());
     }
 }

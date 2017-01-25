@@ -4,10 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.stage.Stage;
@@ -53,11 +50,20 @@ public class GuiClient extends Application {
         grid1.setPadding(new Insets(5));
         grid1.setHgap(5);
         grid1.setVgap(5);
-        TextField output = new TextField();
-        output.setLayoutX(6);
-        output.setLayoutX(5);
+        TextArea textInput = new TextArea();
+        textInput.setOnKeyTyped(event -> {
+            if (textInput.getLength()>500){
+                event.consume();
+
+        }});
+        TextArea textOutput = new TextArea();
+        textOutput.setEditable(false);
+        textInput.setWrapText(true);
+        textOutput.setWrapText(true);
+        Button textButton = new Button("Отправить");
+        grid1.addColumn(0,new Label("Введите текст(не больше 500 символов): "), textInput, textButton);
+        grid1.addColumn(0,new Label("Ответ сервера: "), textOutput);
 //        output.setEditable(false);
-        grid1.addRow(0,new Label("Ответ: "),output);
         Scene sceneSecond = new Scene(grid1);
         loginInput.setOnMouseClicked(event -> {
             loginInput.clear();
@@ -67,6 +73,8 @@ public class GuiClient extends Application {
             passwordInput.clear();
         }
         );
+
+
         GridPane errorGridPane = new GridPane();
         Label errorLabel = new Label();
         errorGridPane.addRow(0, errorLabel);
@@ -130,6 +138,12 @@ public class GuiClient extends Application {
                 e.printStackTrace();
             }
         });
+        textButton.setOnAction(event -> {
+            int bound= (textInput.getLength()<=500) ? textInput.getLength() : 500;
+            String answer= textInput.getText(0,bound);
+
+                }
+        );
         primaryStage.show();
 
     }
