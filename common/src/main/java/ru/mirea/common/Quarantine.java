@@ -85,10 +85,8 @@ public class Quarantine {
                     try {
 
                         String row = customList.remove(customList.size() - 1);
-                        System.out.println(row);
                         getStatistics(row);
                         row = deleteExcess(row);
-                        System.out.println(row);
                         customList2.addNew(row);
                         //customList.printV();
                         counter++;
@@ -115,11 +113,6 @@ public class Quarantine {
 
         }
     };
-    public void showResult(){
-        for (int i=0;i<result.size();i++){
-            System.out.println(result.get(i));
-        }
-    }
     public Quarantine() throws FileNotFoundException {
         for(char c='a';c<='z';c++){
             letters.add(c);
@@ -166,7 +159,6 @@ public class Quarantine {
         return true;
     }
     public String deleteExcess(String originalString){
-        System.out.println("in deleting");
         String result = "";
         for(int i=0;i<originalString.length();i++){
             HashMap<Character,Boolean> mapLetters = new HashMap<>();
@@ -211,13 +203,12 @@ public class Quarantine {
 
         this.oneLoop();
         Set<Integer> keys = loopStatistics.keySet();
-        for(int key:keys){
-            System.out.println("size: "+key+"; count: "+loopStatistics.get(key));
-
-        }
         StringBuilder stringBuilder = new StringBuilder();
         for(int i=0; i<result.size();i++){
             stringBuilder.append(result.get(i));
+            if(i<result.size()){
+                stringBuilder.append("\n");
+            }
         }
         String wtf = stringBuilder.toString();
         return stringBuilder.toString();
