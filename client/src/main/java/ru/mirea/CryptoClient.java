@@ -77,14 +77,14 @@ public class CryptoClient implements AutoCloseable {
         }
     }
 
-    public DialogMessage dialog(String text) throws IOException {
+    public String dialog(String text) throws IOException {
         HttpPost request = new HttpPost(uri.resolve("/dialog"));
         BigInteger encrypted = CryptoUtil.encrypt(text,code);
         request.setEntity(new StringEntity(JsonUtil.toJson(encrypted.toString())));
         try (CloseableHttpResponse response = client.execute(request)) {
             String reply = EntityUtils.toString(response.getEntity());
             String decryptedReply = CryptoUtil.decrypt( new BigInteger(reply), code);
-            return new DialogMessage(decryptedReply);
+            return decryptedReply;
         }
     }
 

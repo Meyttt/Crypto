@@ -1,10 +1,7 @@
 package ru.mirea;
 
 import org.eclipse.jetty.util.IO;
-import ru.mirea.common.CryptoUtil;
-import ru.mirea.common.JsonUtil;
-import ru.mirea.common.VerificationDataEncrypted;
-import ru.mirea.common.VerificationException;
+import ru.mirea.common.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -27,10 +24,15 @@ public class DialogServlet extends HttpServlet {
         String string = new String(bytes, "UTF-8");
         String userMessageEncrypted = JsonUtil.fromJson(string,String.class);
         String userMessage = CryptoUtil.decrypt(new BigInteger(userMessageEncrypted), (BigInteger) req.getSession().getAttribute("code"));
-        //// TODO: 26.01.2017 воткнуть обработку сервером 
-        String answer = "get from func";
+        Quarantine quarantine = new Quarantine(userMessage.split("\\n"));
+        String answer = null;
+        try {
+            answer = quarantine.convert();
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         BigInteger encryptAnswer=CryptoUtil.encrypt(answer, (BigInteger) req.getSession().getAttribute("code"));
-        System.out.println(encryptAnswer.toString());
         resp.getWriter().write(encryptAnswer.toString());
     }
 }

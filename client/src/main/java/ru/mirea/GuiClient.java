@@ -141,6 +141,11 @@ public class GuiClient extends Application {
         textButton.setOnAction(event -> {
             int bound= (textInput.getLength()<=500) ? textInput.getLength() : 500;
             String answer= textInput.getText(0,bound);
+                    try {
+                        textOutput.setText(cryptoClient.dialog(answer));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                 }
         );
