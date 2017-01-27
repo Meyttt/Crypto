@@ -2,6 +2,7 @@ package ru.mirea.common;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.Callable;
 
 /**
  * Created by Александра on 05.11.2016.
@@ -25,7 +26,7 @@ class CustomList<T> extends ArrayList<T> {
         this.add(0, object);
     }
 }
-public class Quarantine {
+public class Quarantine implements Callable {
     static HashMap<Integer,Integer> loopStatistics = new HashMap<>();
     int originalLength=0;
     private int textLength=0;
@@ -44,6 +45,18 @@ public class Quarantine {
 
     public Quarantine(String[] messageData) {
         this.messageData = messageData;
+        for(char c='a';c<='z';c++){
+            letters.add(c);
+        }
+        for(char c='A';c<='Z';c++){
+            letters.add(c);
+        }
+        for(char c='0';c<='9';c++){
+            letters.add(c);
+        }
+        letters.add(' ');
+    }
+    public Quarantine() {
         for(char c='a';c<='z';c++){
             letters.add(c);
         }
@@ -113,18 +126,7 @@ public class Quarantine {
 
         }
     };
-    public Quarantine() throws FileNotFoundException {
-        for(char c='a';c<='z';c++){
-            letters.add(c);
-        }
-        for(char c='A';c<='Z';c++){
-            letters.add(c);
-        }
-        for(char c='0';c<='9';c++){
-            letters.add(c);
-        }
-        letters.add(' ');
-    }
+
 
     private Thread finalPart = new Thread(runnable2);
     public void writeResult() throws IOException {
@@ -199,10 +201,8 @@ public class Quarantine {
         Thread.sleep(100);
 
     }
-    public String convert() throws IOException, InterruptedException {
-
+    public String call() throws IOException, InterruptedException {
         this.oneLoop();
-        Set<Integer> keys = loopStatistics.keySet();
         StringBuilder stringBuilder = new StringBuilder();
         for(int i=0; i<result.size();i++){
             stringBuilder.append(result.get(i));

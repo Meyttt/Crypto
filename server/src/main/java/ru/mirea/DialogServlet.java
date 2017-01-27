@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.concurrent.Future;
 
 /**
  * Created by master on 28.11.2016.
@@ -27,8 +28,7 @@ public class DialogServlet extends HttpServlet {
         Quarantine quarantine = new Quarantine(userMessage.split("\\n"));
         String answer = null;
         try {
-            answer = quarantine.convert();
-
+            answer = quarantine.call();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
